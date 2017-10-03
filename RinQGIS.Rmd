@@ -1,7 +1,7 @@
 ---
 coding: "utf-8"
 lang: "es"
-title: "R en QGIS"
+title: "R desde QGIS"
 subtitle: "Reunión SevillaR"
 author: "Jerónimo Carranza Carranza"
 date: "3 de octubre de 2017"
@@ -9,7 +9,9 @@ output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+options(width=70)
+knitr::opts_chunk$set(comment = "##", warning = FALSE, message = FALSE,
+                      echo = TRUE, tidy = FALSE, size="small")
 ```
 
 ## ![](img/QGIS_logo_with_name.png)
@@ -64,33 +66,37 @@ http://www.qgis.org
 - _QGIS instalado_ con el Complemento **Processing activado**   
       <img src="img/QGIS_Menu_Complementos_Procesos.png" width="500">
 
-## R Scripts: Arquitectura (1/2)
+## R Scripts: Arquitectura y Sintaxis (1/2)
 
 ```{r}
 # #####################################################
-# ######### Cabecera con Parámetros de Entrada y Salida
+# Cabecera con Parámetros de Entrada y Salida
 # #####################################################
-## Grupo en que se encuadra el script: group
-## In1: boolean True
-## In2: number 1
-## In3: string
-## In4: extent
-## In5: file
-## In6: vector [point, line, polygon]
-## In7: raster
-## In8: table
-## In9: field layer
-## InA: selection op1;op2;op3;op4
-## showplots
-## Out1: output {boolean[, ... vector, raster, ...]}
 
+##Grupo en que se encuadra el script: group
+##In1: boolean True
+##In2: number 1
+##In3: string
+##In4: extent
+##In5: file
+##In6: folder
+##In7: vector [point, line, polygon]
+##In8: raster
+##In9: table
+##InA: field {layer}
+##InB: selection op1;op2;op3;op4
 ```
 
-## R Scripts: Arquitectura (2/2)
+## R Scripts: Arquitectura y Sintaxis (2/2)
 
 ```{r}
+##Out1: output {boolean[, ... vector, raster, ...]}
+##showplots     # Muestra salida de plots
+##usereadgdal   # Usa rgdal en vez de brick al abrir vectoriales
+##passfilenames # Lee desde el fichero en disco, no la capa QGIS
+
 # ###################################################################
-# ######### Cuerpo de Script: Código R haciendo uso de los parámetros
+# Cuerpo de Script: Código R haciendo uso de los parámetros
 # ###################################################################
 #library(sp)
 #library(maptools)
@@ -103,3 +109,81 @@ http://www.qgis.org
 #
 
 ```
+
+## R Scripts: Ejemplo - Auto-Kriging (1) 
+```{r eval = FALSE}
+##geostatistics=group
+##CapaVec=vector
+##Campo=field CapaVec
+##SalidaPred=output raster
+##SalidaDesv=output raster
+##showplots
+require("automap")
+require("sp")
+require("raster")
+require("gstat")
+```
+
+## R Scripts: Ejemplo - Auto-Kriging (2) 
+```{r eval = FALSE}
+table=as.data.frame(CapaVec)
+coordinates(table)= ~coords.x1+coords.x2
+c = CapaVec[[Campo]]
+# set.seed(12345)
+# x=rnorm(100,100,1)
+# y=rnorm(100,100,1)
+# c=rnorm(100,1000,500)
+# table=data.frame(x,y,c)
+# coordinates(table)=~x+y
+```
+
+## R Scripts: Ejemplo - Auto-Kriging (3) 
+```{r eval = FALSE}
+kg_result = autoKrige(c~1, table)
+Prediction = raster(kg_result$krige_output,1)
+stdDev = raster(kg_result$krige_output,3)
+SalidaPred<-Prediction
+SalidaDesv<-stdDev
+
+#kg_result$var_model
+>kg_result$var_model
+
+modelo = tail(kg_result$var_model,1)
+m = fit.variogram(kg_result$exp_var, 
+                  vgm(modelo$psill, modelo$model,
+                      modelo$range, modelo$kappa))
+plot(kg_result$exp_var, m, main=as.character(modelo$model))
+
+```
+
+## R Scripts: Ejemplo - Auto-Kriging (4)
+<img src="img/QGIS_R-Script_AutoKriging_Edit.png" width="800">
+
+## R Scripts: Ejemplo - Auto-Kriging (5)
+<img src="img/QGIS_R-Script_AutoKriging_Edit_Ayuda.png" width="800">
+
+## R Scripts: Ejemplo - Auto-Kriging (6)
+<img src="img/QGIS_R-Script_AutoKriging_Ejecucion.png" width="800">
+
+## R Scripts: Ejemplo - Auto-Kriging (7)
+<img src="img/QGIS_R-Script_AutoKriging_Prediccion.png" width="800">
+
+## R Scripts: Ejemplo - Auto-Kriging (8)
+<img src="img/QGIS_R-Script_AutoKriging_Desviacion.png" width="800">
+
+## R Scripts: Ejemplo - Auto-Kriging (9)
+<img src="img/QGIS_R-Script_AutoKriging_Resultados_vgm.png" width="800">
+
+## Referencias
+
+- [User Manual - processing](http://docs.qgis.org/2.18/es/docs/user_manual/processing/3rdParty.html#r-creating-r-scripts)
+
+- [Calling the SpatialPosition package from within QGIS.](https://cran.r-project.org/web/packages/SpatialPosition/vignettes/QGISInterface.html)
+
+- [ANÁLISIS ESTADÍSTICO DE DATOS ESPACIALES CON QGIS Y R](https://books.google.es/books?isbn=8436270916)
+
+- [Image Classification with RandomForests in R (and QGIS)](https://www.linkedin.com/pulse/image-classification-randomforests-r-qgis-ali-santacruz)
+
+
+# Fin, Gracias.
+

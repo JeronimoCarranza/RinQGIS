@@ -1,4 +1,4 @@
-# R en QGIS
+# R desde QGIS
 
 Uso de R desde QGIS
 
