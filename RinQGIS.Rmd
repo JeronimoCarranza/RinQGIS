@@ -1,0 +1,105 @@
+---
+coding: "utf-8"
+lang: "es"
+title: "R en QGIS"
+subtitle: "Reunión SevillaR"
+author: "Jerónimo Carranza Carranza"
+date: "3 de octubre de 2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ![](img/QGIS_logo_with_name.png)
+
+- QGIS es un Sistema de Información Geográfica (SIG) de Código Abierto licenciado bajo GNU - General Public License.  
+- QGIS es un proyecto oficial de Open Source Geospatial Foundation (OSGeo).  
+- QGIS corre sobre Linux, Unix, Mac OSX, Windows y Android.  
+- QGIS soporta numerosos formatos y funcionalidades de datos vector, datos ráster y bases de datos.  
+- QGIS es el SIG Líder de Código Abierto para Escritorio.  
+- La versión actual es QGIS 2.18.13 'Las Palmas' y fue lanzada el 15.09.2017.  
+
+http://www.qgis.org
+
+
+## QGIS - Inicio: proyectos recientes
+<img src="img/QGIS_Inicio_Proyectos_Recientes.png" width="800">
+
+## QGIS - Vistazo
+<img src="img/QGIS_Sevici_Vistazo.png" width="800">
+
+## QGIS - Menú -> Procesos 
+<img src="img/QGIS_Menu_Procesos.png" width="800">
+
+## QGIS - Herramientas de procesado
+<img src="img/QGIS_Caja_Herramientas_Procesado.png" width="800">
+
+## R Scripts -> Editor
+<img src="img/QGIS_R-Script_Edit.png" width="800">
+
+## R Scripts -> Ejecutar
+<img src="img/QGIS_R-Script_Ejecucion_Parametros.png" width="800">
+
+## R Scripts -> Resultados
+<img src="img/QGIS_R-Script_Resultados.png" width="800">
+
+## R Scripts -> Ayuda
+<img src="img/QGIS_R-Script_Ayuda.png" width="800">
+
+## R Scripts -> Colecciones en línea
+<img src="img/QGIS_R-Script_Colecciones_en_linea.png" width="800">
+
+## QGIS - Menú -> Procesos -> Opciones
+<img src="img/QGIS_Menu_Procesos_OpcionesGrales.png" width="800">
+
+## QGIS - Menú -> Procesos -> Opciones R
+<img src="img/QGIS_Menu_Procesos_Opciones.png" width="800">
+
+## QGIS - R: Requerimientos
+- _R instalado_ con al menos las siguientes librerías:   
+      **sp, rgdal, maptools, raster**
+
+- _QGIS instalado_ con el Complemento **Processing activado**   
+      <img src="img/QGIS_Menu_Complementos_Procesos.png" width="500">
+
+## R Scripts: Arquitectura (1/2)
+
+```{r}
+# #####################################################
+# ######### Cabecera con Parámetros de Entrada y Salida
+# #####################################################
+## Grupo en que se encuadra el script: group
+## In1: boolean True
+## In2: number 1
+## In3: string
+## In4: extent
+## In5: file
+## In6: vector [point, line, polygon]
+## In7: raster
+## In8: table
+## In9: field layer
+## InA: selection op1;op2;op3;op4
+## showplots
+## Out1: output {boolean[, ... vector, raster, ...]}
+
+```
+
+## R Scripts: Arquitectura (2/2)
+
+```{r}
+# ###################################################################
+# ######### Cuerpo de Script: Código R haciendo uso de los parámetros
+# ###################################################################
+#library(sp)
+#library(maptools)
+
+# ...
+
+#> X 
+#Una línea que se inicia con > indica que lo que le sigue, X, 
+# se debe enviar al visor de resultados 
+#
+
+```

@@ -2,6 +2,6 @@
 
 Uso de R desde QGIS
 
-Preparado para Reunión SevillaR 20171003
+Reunión SevillaR 20171003
 
 
