@@ -51,7 +51,8 @@ http://www.qgis.org
 <img src="img/QGIS_R-Script_Ayuda.png" width="800">
 
 ## R Scripts -> Colecciones en línea
-<img src="img/QGIS_R-Script_Colecciones_en_linea.png" width="800">
+<img src="img/QGIS_R-Script_Colecciones_en_linea.png" width="780">
+https://github.com/qgis/QGIS-Processing
 
 ## QGIS - Menú -> Procesos -> Opciones
 <img src="img/QGIS_Menu_Procesos_OpcionesGrales.png" width="800">
@@ -67,48 +68,40 @@ http://www.qgis.org
       <img src="img/QGIS_Menu_Complementos_Procesos.png" width="500">
 
 ## R Scripts: Arquitectura y Sintaxis (1/2)
-
-```{r}
-# #####################################################
-# Cabecera con Parámetros de Entrada y Salida
-# #####################################################
-
-##Grupo en que se encuadra el script: group
-##In1: boolean True
-##In2: number 1
-##In3: string
-##In4: extent
-##In5: file
-##In6: folder
-##In7: vector [point, line, polygon]
-##In8: raster
-##In9: table
-##InA: field {layer}
-##InB: selection op1;op2;op3;op4
+**Cabecera de Script con Parámetros.**  
+ Las líneas de cabecera deben comenzar con ##. La primera hace referencia al **grupo** en que se encuadra el script
+```{r eval = FALSE}
+##Geoestadística=group
+```
+ La sintaxis de los **_parámetros de entrada_** es:
+```{bash eval = FALSE}
+<input_param>::='##'<param>=[optional] <input_type> [<default>]<EOL>
+<input_type>::= (boolean | number | [long]string | file | folder |
+        extent | crs | [multiple] vector [point|line|polygon] |
+        [multiple] raster | table | field <parent_param> |
+        selection <option>(";"<option>)+)
+Ejemplos:
+##Capa=vector polygon
+##Area=field Capa 
+##Modelo=optional selection exacto;aproximado 
 ```
 
 ## R Scripts: Arquitectura y Sintaxis (2/2)
-
-```{r}
-##Out1: output {boolean[, ... vector, raster, ...]}
+ La sintaxis de los **_parámetros de salida_** es:
+```{bash eval = FALSE}
+<output_param>::='##'<param>=(output) <output_type> <EOL>
+<output_type>::= (vector | raster | table)
+Por ejemplo: ##output raster
+```
+ Los **_parámetros de configuración_** son:
+```{bash eval = FALSE}
 ##showplots     # Muestra salida de plots
 ##usereadgdal   # Usa rgdal en vez de brick al abrir vectoriales
 ##passfilenames # Lee desde el fichero en disco, no la capa QGIS
-
-# ###################################################################
-# Cuerpo de Script: Código R haciendo uso de los parámetros
-# ###################################################################
-#library(sp)
-#library(maptools)
-
-# ...
-
-#> X 
-#Una línea que se inicia con > indica que lo que le sigue, X, 
-# se debe enviar al visor de resultados 
-#
-
 ```
+**Cuerpo de Script**   
+Es el código en R haciendo uso de los parámetros, con una única salvedad: Una línea que se inicia con **>** indica que lo que le sigue,
+se debe enviar al visor de resultados de QGIS.
 
 ## R Scripts: Ejemplo - Auto-Kriging (1) 
 ```{r eval = FALSE}
